@@ -1198,3 +1198,167 @@ buildDynamicZones(screen);
 };
 
 buildDynamicZones("home");
+/* ==========================================
+ADD TO END OF script.js
+UNIVERSAL IMAGE MAP
+========================================== */
+
+const IMAGE_MAP = {
+
+home:"images/home.png",
+composite:"images/composite.png",
+people:"images/people.png",
+operations:"images/operations.png",
+sandf:"images/sandf.png",
+
+temperature_log:"images/temperature_log.png",
+temp1:"images/temp_1.PNG",
+temp2:"images/temp_2.png",
+temp3:"images/temp_3.png",
+temp4:"images/temp_4.png",
+temp5:"images/temp_5.png",
+temp6:"images/temp_6.png",
+
+storeleader:"images/storeleader.png",
+frontend:"images/frontend.png",
+center:"images/center.png",
+bakery:"images/bakery-notifications.png",
+deli:"images/deli-notifications.png",
+meat:"images/meat-notifications.png",
+
+production:"images/production.png",
+inventory:"images/inventory.png",
+ordering:"images/ordering.png",
+sales:"images/sales.png",
+labor:"images/labor.png",
+foodsafety:"images/foodsafety.png",
+freshstart:"images/freshstart.png",
+replenishment:"images/replenishment.png",
+maximo:"images/maximo.png",
+store_scorecard:"images/store_scorecard.png",
+shrink:"images/shrink.png",
+safety:"images/safety.png"
+
+};
+
+/* ==========================================
+IMAGE LOADER
+========================================== */
+
+function loadScreen(name){
+
+if(!IMAGE_MAP[name]) return;
+
+current=name;
+
+img.src=IMAGE_MAP[name];
+
+showZones(name);
+
+updateNavigation();
+
+}
+
+/* ==========================================
+PRELOAD
+========================================== */
+
+Object.values(IMAGE_MAP).forEach(path=>{
+
+const preload=new Image();
+
+preload.src=path;
+
+});
+
+/* ==========================================
+HOME RESET
+========================================== */
+
+function home(){
+
+historyStack=["home"];
+
+loadScreen("home");
+
+}
+
+document.addEventListener("keyup",e=>{
+
+if(e.key==="Home"){
+
+home();
+
+}
+
+});
+
+/* ==========================================
+BACKSTACK
+========================================== */
+
+function push(screen){
+
+historyStack.push(screen);
+
+loadScreen(screen);
+
+}
+
+function replace(screen){
+
+historyStack=[screen];
+
+loadScreen(screen);
+
+}
+
+/* ==========================================
+OVERRIDE GO
+========================================== */
+
+go=function(screen,pushHistory=true){
+
+if(!SCREENS[screen]) return;
+
+if(pushHistory){
+
+historyStack.push(screen);
+
+}
+
+loadScreen(screen);
+
+};
+
+/* ==========================================
+ROUTE TABLE
+========================================== */
+
+const ROUTER={
+
+home:{
+temperature:"temperature_log",
+console:"composite",
+alerts:"storeleader",
+production:"production",
+inventory:"inventory",
+ordering:"ordering",
+sales:"sales",
+labor:"labor",
+foodsafety:"foodsafety",
+safety:"safety",
+freshstart:"freshstart",
+scorecard:"store_scorecard",
+replenishment:"replenishment",
+maximo:"maximo",
+shrink:"shrink"
+}
+
+};
+
+/* ==========================================
+INITIALIZE
+========================================== */
+
+replace("home");
