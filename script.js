@@ -194,3 +194,128 @@ window.addEventListener("resize", function () {
 window.dispatchEvent(new Event("resize"));
 
 go("home", false);
+/* ==========================================
+ADD THIS TO THE END OF script.js
+PRODUCTION EXTENSIONS
+========================================== */
+
+/* ---------- IMAGE LOAD ---------- */
+
+img.addEventListener("load", () => {
+    window.scrollTo(0, 0);
+});
+
+/* ---------- BROWSER HISTORY ---------- */
+
+window.history.replaceState({ screen: "home" }, "");
+
+const originalGo = go;
+
+go = function (screenName, pushHistory = true) {
+
+    if (!SCREENS[screenName]) return;
+
+    current = screenName;
+
+    img.src = SCREENS[screenName].image;
+
+    showZones(screenName);
+
+    if (pushHistory) {
+        historyStack.push(screenName);
+        history.pushState(
+            { screen: screenName },
+            "",
+            "#" + screenName
+        );
+    }
+
+};
+
+/* ---------- POPSTATE ---------- */
+
+window.onpopstate = function () {
+
+    if (historyStack.length > 1) {
+
+        historyStack.pop();
+
+        const previous = historyStack[historyStack.length - 1];
+
+        current = previous;
+
+        img.src = SCREENS[previous].image;
+
+        showZones(previous);
+
+    } else {
+
+        current = "home";
+
+        img.src = SCREENS.home.image;
+
+        showZones("home");
+
+    }
+
+};
+
+/* ---------- PRELOAD ---------- */
+
+function preloadImages() {
+
+    Object.keys(SCREENS).forEach(key => {
+
+        const image = new Image();
+
+        image.src = SCREENS[key].image;
+
+    });
+
+}
+
+preloadImages();
+
+/* ---------- SWIPE LOCK ---------- */
+
+let swipeLocked = false;
+
+document.addEventListener("touchstart", () => {
+
+    swipeLocked = false;
+
+}, { passive: true });
+
+document.addEventListener("touchmove", () => {
+
+    swipeLocked = true;
+
+}, { passive: true });
+
+/* ---------- HOME SHORTCUT ---------- */
+
+document.addEventListener("keydown", e => {
+
+    if (e.key.toLowerCase() === "h") {
+
+        historyStack = ["home"];
+
+        go("home", false);
+
+    }
+
+});
+
+/* ---------- IMAGE ERROR ---------- */
+
+img.onerror = function () {
+
+    console.error("Missing image:", img.src);
+
+};
+
+/* ---------- INITIALIZE ---------- */
+
+historyStack = ["home"];
+
+go("home", false);
