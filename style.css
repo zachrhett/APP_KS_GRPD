@@ -1,8 +1,8 @@
-html,body,#app{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
-#app{position:relative}
-#screen{width:100%;height:100%;object-fit:contain;display:block}
+html,body,#app{margin:0;height:100%;overflow:hidden;background:#000}
+#app{position:relative;width:100%;height:100%}
+#screen{width:100%;height:100%;object-fit:contain}
 #overlay{position:absolute;inset:0}
-.hotspot{position:absolute;background:transparent;border:none;cursor:pointer}
+.hotspot{position:absolute;background:transparent;border:none}
 #hs-production{left:4%;top:68%;width:16%;height:14%}
 #hs-shrink{left:22%;top:68%;width:16%;height:14%}
 #hs-temperature{left:58%;top:68%;width:16%;height:14%}
