@@ -471,3 +471,180 @@ SCREENS.center.left="frontend";
 SCREENS.frontend.left="storeleader";
 
 updateNavigation();
+/* ==========================================
+ADD TO END OF script.js
+TEMPERATURE WORKFLOW
+========================================== */
+
+SCREENS.temperature_log.right = "temp1";
+
+SCREENS.temp1 = {
+    ...SCREENS.temp1,
+    right: "temp2",
+    left: "temperature_log",
+    back: "temperature_log"
+};
+
+SCREENS.temp2 = {
+    ...SCREENS.temp2,
+    right: "temp3",
+    left: "temp1",
+    back: "temp1"
+};
+
+SCREENS.temp3 = {
+    ...SCREENS.temp3,
+    right: "temp4",
+    left: "temp2",
+    back: "temp2"
+};
+
+SCREENS.temp4 = {
+    ...SCREENS.temp4,
+    right: "temp5",
+    left: "temp3",
+    back: "temp3"
+};
+
+SCREENS.temp5 = {
+    ...SCREENS.temp5,
+    right: "temp6",
+    left: "temp4",
+    back: "temp4"
+};
+
+SCREENS.temp6 = {
+    ...SCREENS.temp6,
+    right: "home",
+    left: "temp5",
+    back: "home"
+};
+
+/* ==========================================
+COMPOSITE WORKFLOW
+========================================== */
+
+SCREENS.composite.right = "people";
+
+SCREENS.people.left = "composite";
+SCREENS.people.right = "operations";
+
+SCREENS.operations.left = "people";
+SCREENS.operations.right = "sandf";
+
+SCREENS.sandf.left = "operations";
+SCREENS.sandf.right = "home";
+
+/* ==========================================
+HOME BUTTON MAP
+========================================== */
+
+const HOME_BUTTONS = {
+
+    zoneConsole: "composite",
+
+    zoneTemperature: "temperature_log",
+
+    zoneShrink: "shrink",
+
+    zoneAlerts: "storeleader",
+
+    zoneProduction: "production",
+
+    zoneInventory: "inventory",
+
+    zoneOrdering: "ordering",
+
+    zoneSales: "sales",
+
+    zoneLabor: "labor",
+
+    zoneSafety: "safety",
+
+    zoneFoodSafety: "foodsafety",
+
+    zoneFreshStart: "freshstart",
+
+    zoneScorecard: "store_scorecard",
+
+    zoneMaximo: "maximo",
+
+    zoneReplenishment: "replenishment"
+
+};
+
+Object.keys(HOME_BUTTONS).forEach(id => {
+
+    const button = document.getElementById(id);
+
+    if (!button) return;
+
+    button.onclick = () => {
+
+        go(HOME_BUTTONS[id]);
+
+    };
+
+});
+
+/* ==========================================
+DOUBLE TAP HOME
+========================================== */
+
+let lastTap = 0;
+
+document.addEventListener("touchend", e => {
+
+    const now = Date.now();
+
+    if (now - lastTap < 300) {
+
+        historyStack = ["home"];
+
+        go("home", false);
+
+    }
+
+    lastTap = now;
+
+}, { passive: true });
+
+/* ==========================================
+IMAGE CACHE
+========================================== */
+
+const cache = {};
+
+Object.keys(SCREENS).forEach(name => {
+
+    cache[name] = new Image();
+
+    cache[name].src = SCREENS[name].image;
+
+});
+
+/* ==========================================
+FAST NAVIGATION
+========================================== */
+
+function quickGo(name) {
+
+    if (!SCREENS[name]) return;
+
+    current = name;
+
+    img.src = cache[name].src;
+
+    showZones(name);
+
+}
+
+/* ==========================================
+STARTUP
+========================================== */
+
+historyStack = ["home"];
+
+quickGo("home");
+
+updateNavigation();
