@@ -1,38 +1,30 @@
 const screen=document.getElementById('screen');
-
+const backBtn=document.getElementById('hs-back');
 const routes={
- home:'images/home.png',
- production:'images/production.png',
- inventory:'images/inventory.png',
- ordering:'images/ordering.png',
- labor:'images/labor.png',
- replenishment:'images/replenishment.png',
- sales:'images/sales.png',
- shrink:'images/shrink.png',
- safety:'images/safety.png',
- foodsafety:'images/foodsafety.png',
- freshstart:'images/freshstart.png',
- maximo:'images/maximo.png',
- storeleader:'images/storeleader.png',
- scorecard:'images/store_scorecard.png',
- composite:'images/composite.png',
- temperature:'images/temperature_log.png'
+home:'images/home.png',
+production:'images/production.png',
+shrink:'images/shrink.png',
+temperature:'images/temperature_log.png',
+console:'images/deli-notifications.png'
 };
-
-let history=['home'];
-
+let current='home';
+let stack=['home'];
 function show(name){
  if(!routes[name]) return;
+ current=name;
  screen.src=routes[name];
- history.push(name);
+ stack.push(name);
+ backBtn.style.display=name==='home'?'none':'block';
 }
-
 function back(){
- if(history.length>1){
-   history.pop();
-   screen.src=routes[history[history.length-1]];
- }
+ if(stack.length<2)return;
+ stack.pop();
+ current=stack[stack.length-1];
+ screen.src=routes[current];
+ backBtn.style.display=current==='home'?'none':'block';
 }
-
-// Pass 3 adds hotspots and swipe navigation.
-show('home');
+document.getElementById('hs-production').onclick=()=>show('production');
+document.getElementById('hs-shrink').onclick=()=>show('shrink');
+document.getElementById('hs-temperature').onclick=()=>show('temperature');
+document.getElementById('hs-console').onclick=()=>show('console');
+backBtn.onclick=back;
