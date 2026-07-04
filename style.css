@@ -240,3 +240,203 @@ display:none!important;
 .visible{
 display:block!important;
 }
+/* ==========================================
+ADD TO END OF style.css
+BACK BUTTONS
+SWIPE INDICATOR
+MIC BUTTON
+========================================== */
+
+#navBack{
+position:absolute;
+top:3%;
+left:3%;
+width:56px;
+height:56px;
+z-index:1000;
+border:none;
+background:transparent;
+cursor:pointer;
+display:none;
+}
+
+#navHome{
+position:absolute;
+top:3%;
+right:3%;
+width:56px;
+height:56px;
+z-index:1000;
+border:none;
+background:transparent;
+cursor:pointer;
+display:none;
+}
+
+#voiceButton{
+position:absolute;
+left:50%;
+bottom:5%;
+transform:translateX(-50%);
+width:88px;
+height:88px;
+border-radius:50%;
+border:none;
+background:transparent;
+z-index:900;
+cursor:pointer;
+display:none;
+}
+
+#voiceRing{
+position:absolute;
+inset:0;
+border-radius:50%;
+opacity:0;
+transform:scale(.8);
+}
+
+.voice-active #voiceRing{
+
+animation:friendPulse 1.2s infinite;
+
+}
+
+@keyframes friendPulse{
+
+0%{
+
+transform:scale(.85);
+
+opacity:.15;
+
+box-shadow:0 0 0 rgba(0,255,120,.8);
+
+}
+
+50%{
+
+transform:scale(1.05);
+
+opacity:.75;
+
+box-shadow:
+0 0 18px rgba(0,255,120,.9),
+0 0 36px rgba(0,255,120,.7);
+
+}
+
+100%{
+
+transform:scale(1.25);
+
+opacity:0;
+
+box-shadow:
+0 0 54px rgba(0,255,120,0);
+
+}
+
+}
+
+.fadeIn{
+
+animation:fadeIn .25s linear;
+
+}
+
+.fadeOut{
+
+animation:fadeOut .25s linear;
+
+}
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+}
+
+to{
+
+opacity:1;
+
+}
+
+}
+
+@keyframes fadeOut{
+
+from{
+
+opacity:1;
+
+}
+
+to{
+
+opacity:0;
+
+}
+
+}
+
+.no-select{
+
+user-select:none;
+
+-webkit-user-select:none;
+
+-webkit-touch-callout:none;
+
+}
+
+img{
+
+image-rendering:auto;
+
+}
+
+button{
+
+font:inherit;
+
+}
+
+button:focus{
+
+outline:none;
+
+}
+
+@media (max-width:430px){
+
+#navBack,
+#navHome{
+
+width:48px;
+height:48px;
+
+}
+
+#voiceButton{
+
+width:76px;
+height:76px;
+
+}
+
+}
+
+@media (min-width:700px){
+
+#app{
+
+max-width:430px;
+margin:auto;
+
+}
+
+}
