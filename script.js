@@ -319,3 +319,155 @@ img.onerror = function () {
 historyStack = ["home"];
 
 go("home", false);
+/* ==========================================
+ADD TO END OF script.js
+VOICE + BACK + HOME + DEPARTMENT LINKS
+========================================== */
+
+const navBack = document.createElement("button");
+navBack.id = "navBack";
+
+const navHome = document.createElement("button");
+navHome.id = "navHome";
+
+const voiceButton = document.createElement("button");
+voiceButton.id = "voiceButton";
+
+const voiceRing = document.createElement("div");
+voiceRing.id = "voiceRing";
+
+voiceButton.appendChild(voiceRing);
+
+document.getElementById("app").appendChild(navBack);
+document.getElementById("app").appendChild(navHome);
+document.getElementById("app").appendChild(voiceButton);
+
+function updateNavigation() {
+
+    if(current==="home"){
+
+        navBack.style.display="none";
+        navHome.style.display="none";
+
+    }else{
+
+        navBack.style.display="block";
+        navHome.style.display="block";
+
+    }
+
+}
+
+const previousGo=go;
+
+go=function(screen,push=true){
+
+    previousGo(screen,push);
+
+    updateNavigation();
+
+};
+
+navBack.onclick=function(){
+
+    const back=SCREENS[current].back;
+
+    if(back){
+
+        go(back);
+
+    }else{
+
+        goBack();
+
+    }
+
+};
+
+navHome.onclick=function(){
+
+    historyStack=["home"];
+
+    go("home",false);
+
+};
+
+voiceButton.onclick=function(){
+
+    if(!("webkitSpeechRecognition" in window)){
+
+        alert("Voice recognition not supported.");
+
+        return;
+
+    }
+
+    voiceButton.classList.add("voice-active");
+
+    const recognition=new webkitSpeechRecognition();
+
+    recognition.lang="en-US";
+
+    recognition.interimResults=false;
+
+    recognition.maxAlternatives=1;
+
+    recognition.start();
+
+    recognition.onresult=function(event){
+
+        const text=event.results[0][0].transcript.toLowerCase();
+
+        voiceButton.classList.remove("voice-active");
+
+        if(text.includes("temperature")) go("temperature_log");
+        else if(text.includes("food")) go("foodsafety");
+        else if(text.includes("production")) go("production");
+        else if(text.includes("inventory")) go("inventory");
+        else if(text.includes("ordering")) go("ordering");
+        else if(text.includes("sales")) go("sales");
+        else if(text.includes("labor")) go("labor");
+        else if(text.includes("safety")) go("safety");
+        else if(text.includes("fresh")) go("freshstart");
+        else if(text.includes("shrink")) go("shrink");
+        else if(text.includes("maximo")) go("maximo");
+        else if(text.includes("score")) go("store_scorecard");
+        else if(text.includes("replenishment")) go("replenishment");
+        else if(text.includes("store leader")) go("storeleader");
+        else if(text.includes("front end")) go("frontend");
+        else if(text.includes("center")) go("center");
+        else if(text.includes("bakery")) go("bakery");
+        else if(text.includes("deli")) go("deli");
+        else if(text.includes("meat")) go("meat");
+        else if(text.includes("friend")) go("home");
+
+    };
+
+    recognition.onerror=function(){
+
+        voiceButton.classList.remove("voice-active");
+
+    };
+
+    recognition.onend=function(){
+
+        voiceButton.classList.remove("voice-active");
+
+    };
+
+};
+
+SCREENS.storeleader.right="frontend";
+
+SCREENS.frontend.right="center";
+SCREENS.center.right="bakery";
+SCREENS.bakery.right="deli";
+SCREENS.deli.right="meat";
+
+SCREENS.meat.left="deli";
+SCREENS.deli.left="bakery";
+SCREENS.bakery.left="center";
+SCREENS.center.left="frontend";
+SCREENS.frontend.left="storeleader";
+
+updateNavigation();
