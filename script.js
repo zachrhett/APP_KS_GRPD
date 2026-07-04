@@ -648,3 +648,240 @@ historyStack = ["home"];
 quickGo("home");
 
 updateNavigation();
+/* ==========================================
+ADD TO END OF script.js
+GLOBAL ROUTER
+========================================== */
+
+const ROUTES = {
+
+home:[
+"production",
+"inventory",
+"ordering",
+"sales",
+"labor",
+"foodsafety",
+"safety",
+"freshstart",
+"maximo",
+"store_scorecard",
+"replenishment",
+"temperature_log",
+"storeleader",
+"shrink",
+"composite"
+],
+
+storeleader:[
+"frontend",
+"center",
+"bakery",
+"deli",
+"meat"
+],
+
+temperature_log:[
+"temp1",
+"temp2",
+"temp3",
+"temp4",
+"temp5",
+"temp6"
+],
+
+composite:[
+"people",
+"operations",
+"sandf"
+]
+
+};
+
+function nextScreen(){
+
+const list=ROUTES[current];
+
+if(!list) return;
+
+go(list[0]);
+
+}
+
+function previousScreen(){
+
+const screens=Object.keys(SCREENS);
+
+const index=screens.indexOf(current);
+
+if(index>0){
+
+go(screens[index-1]);
+
+}
+
+}
+
+/* ==========================================
+KEYBOARD SUPPORT
+========================================== */
+
+document.addEventListener("keydown",e=>{
+
+switch(e.key){
+
+case"ArrowLeft":
+
+if(SCREENS[current].left){
+
+go(SCREENS[current].left);
+
+}
+
+break;
+
+case"ArrowRight":
+
+if(SCREENS[current].right){
+
+go(SCREENS[current].right);
+
+}
+
+break;
+
+case"Backspace":
+
+goBack();
+
+break;
+
+case"Home":
+
+historyStack=["home"];
+
+go("home",false);
+
+break;
+
+}
+
+});
+
+/* ==========================================
+SWIPE IMPROVEMENTS
+========================================== */
+
+let startX=0;
+
+let endX=0;
+
+document.addEventListener("touchstart",e=>{
+
+startX=e.changedTouches[0].screenX;
+
+},{passive:true});
+
+document.addEventListener("touchend",e=>{
+
+endX=e.changedTouches[0].screenX;
+
+const delta=endX-startX;
+
+if(Math.abs(delta)<60) return;
+
+if(delta<0){
+
+if(SCREENS[current].right){
+
+go(SCREENS[current].right);
+
+}
+
+}else{
+
+if(SCREENS[current].left){
+
+go(SCREENS[current].left);
+
+}else{
+
+goBack();
+
+}
+
+}
+
+},{passive:true});
+
+/* ==========================================
+AUTO BACK BUTTONS
+========================================== */
+
+document.querySelectorAll(".zone").forEach(z=>{
+
+z.addEventListener("contextmenu",e=>{
+
+e.preventDefault();
+
+goBack();
+
+});
+
+});
+
+/* ==========================================
+SCREEN FADE
+========================================== */
+
+function fadeScreen(next){
+
+img.classList.remove("fadeIn");
+
+img.classList.add("fadeOut");
+
+setTimeout(()=>{
+
+img.src=SCREENS[next].image;
+
+showZones(next);
+
+img.classList.remove("fadeOut");
+
+img.classList.add("fadeIn");
+
+current=next;
+
+},120);
+
+}
+
+/* ==========================================
+OVERRIDE GO
+========================================== */
+
+const standardGo=go;
+
+go=function(screen,push=true){
+
+if(!SCREENS[screen]) return;
+
+if(push){
+
+historyStack.push(screen);
+
+}
+
+fadeScreen(screen);
+
+updateNavigation();
+
+};
+
+/* ==========================================
+START APPLICATION
+========================================== */
+
+historyStack=["home"];
+
+go("home",false);
